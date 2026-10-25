@@ -125,6 +125,22 @@ document.getElementById("buyDemo").addEventListener("click",()=>{closeModal(docu
 document.getElementById("supportForm").addEventListener("submit",e=>{e.preventDefault();closeModal(document.getElementById("supportModal"));toast("Message preview","Your message was not sent. A backend support service is not connected.");});
 document.querySelectorAll("[data-policy]").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();document.getElementById("policyTitle").textContent=a.dataset.policy;document.getElementById("policyText").textContent="This is placeholder information for the "+a.dataset.policy+". Before a real launch, replace this text with reviewed, accurate policy content for your service.";openModal("policyModal");}));
 renderCountries();renderServices();renderTransactions();
+
+// Backend health check only. This does not enable login, wallet, payments, or number ordering.
+const API_BASE = "https://novanumber-api.onrender.com";
+async function checkNovaNumberAPI() {
+  try {
+    const response = await fetch(`${API_BASE}/api/health`);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const data = await response.json();
+    console.log("NovaNumber API health:", data);
+    toast("Backend connected", "API health check successful.");
+  } catch (error) {
+    console.error("NovaNumber API health check failed:", error);
+    toast("Backend connection issue", "Health check failed. Please try again.");
+  }
+}
+checkNovaNumberAPI();
 </script>
 </body>
-</html>
+ </html>
